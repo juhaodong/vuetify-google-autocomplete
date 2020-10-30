@@ -958,15 +958,15 @@ export default {
           document.getElementById(this.id),
           options,
         )
-        if(this.componentRestrictions){
-          this.autocomplete.setComponentRestrictions(this.componentRestrictions)
-        }
 
 
         // this is potentially inside a promise so the autocomplete MUST exist to add the listener
         this.autocomplete.addListener('place_changed', () => {
           const place = this.autocomplete.getPlace()
 
+          if(place.postal_code&&this.componentRestrictions.postalCode){
+            console.log(place.postal_code)
+          }
           // if (!place || !place.geometry) {
           if (Object.keys(place).length < 2) {
             // User entered the name of a Place that was not suggested and
