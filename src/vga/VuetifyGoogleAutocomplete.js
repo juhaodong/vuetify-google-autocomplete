@@ -944,10 +944,6 @@ export default {
         }
       }
 
-      if (this.componentRestrictions) {
-        options.componentRestrictions = Object.assign({}, options.componentRestrictions, this.componentRestrictions)
-      }
-
       if (this.fields) {
         if (typeof this.fields === 'string') {
           options.fields = [this.fields]
@@ -962,6 +958,10 @@ export default {
           document.getElementById(this.id),
           options,
         )
+        if(this.componentRestrictions){
+          this.autocomplete.setComponentRestrictions(this.componentRestrictions)
+        }
+
 
         // this is potentially inside a promise so the autocomplete MUST exist to add the listener
         this.autocomplete.addListener('place_changed', () => {
