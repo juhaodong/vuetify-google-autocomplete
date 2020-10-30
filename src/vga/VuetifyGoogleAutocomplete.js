@@ -1,4 +1,4 @@
-import { VTextField } from 'vuetify/lib';
+import { VTextField } from 'vuetify/lib'
 
 /**
  * @module vuetify-google-autocomplete
@@ -108,6 +108,7 @@ export default {
       type: String,
       default: 'off',
     },
+    componentRestrictions: { type: Object, default: null },
     /**
      * Maps to Vuetify 'clear-icon' prop.
      *
@@ -768,17 +769,17 @@ export default {
     lastSelectedPlace: '',
   }),
   computed: {
-    rulesPlusInternalRules() {
-      const enforceSelectionRequired = [];
+    rulesPlusInternalRules () {
+      const enforceSelectionRequired = []
 
       if (this.selectionRequired
         && (this.lastSelectedPlace.trim() === '' || this.lastSelectedPlace !== this.autocompleteText)) {
-        enforceSelectionRequired.push(this.selectionRequiredText);
+        enforceSelectionRequired.push(this.selectionRequiredText)
       } else {
-        enforceSelectionRequired.push(true);
+        enforceSelectionRequired.push(true)
       }
 
-      return [...this.rules, ...enforceSelectionRequired];
+      return [...this.rules, ...enforceSelectionRequired]
     },
   },
   /**
@@ -790,73 +791,73 @@ export default {
      * Called when the input gets focus
      * @access private
      */
-    onFocus() {
-      this.geolocate();
-      this.$emit('focus');
+    onFocus () {
+      this.geolocate()
+      this.$emit('focus')
     },
 
     /**
      * Called when the input loses focus
      * @access private
      */
-    onBlur() {
-      this.$emit('blur');
+    onBlur () {
+      this.$emit('blur')
     },
 
     /**
      * Called when the input got changed
      * @access private
      */
-    onChange() {
-      this.$emit('change', this.autocompleteText);
+    onChange () {
+      this.$emit('change', this.autocompleteText)
     },
 
     /**
      * Called when appended icon is clicked
      * @access private
      */
-    onClickAppend() {
-      this.$emit('click:append');
+    onClickAppend () {
+      this.$emit('click:append')
     },
 
     /**
      * Called when appended outer icon is clicked
      * @access private
      */
-    onClickAppendOuter() {
-      this.$emit('click:append-outer');
+    onClickAppendOuter () {
+      this.$emit('click:append-outer')
     },
 
     /**
      * Called when clearable icon clicked
      * @access private
      */
-    onClickClear() {
-      this.$emit('click:clear');
+    onClickClear () {
+      this.$emit('click:clear')
     },
 
     /**
      * Called when prepended icon is clicked
      * @access private
      */
-    onClickPrepend() {
-      this.$emit('click:prepend');
+    onClickPrepend () {
+      this.$emit('click:prepend')
     },
 
     /**
      * Called when prepended inner icon is clicked
      * @access private
      */
-    onClickPrependInner() {
-      this.$emit('click:prepend-inner');
+    onClickPrependInner () {
+      this.$emit('click:prepend-inner')
     },
 
     /**
      * The error.sync event
      * @access private
      */
-    onUpdateError() {
-      this.$emit('update:error');
+    onUpdateError () {
+      this.$emit('update:error')
     },
 
     /**
@@ -864,33 +865,33 @@ export default {
      * @param {Event} event A keypress event
      * @access private
      */
-    onKeyPress(event) {
-      this.$emit('keypress', event);
+    onKeyPress (event) {
+      this.$emit('keypress', event)
     },
 
     /**
      * Clear the input
      * @access private
      */
-    clear() {
-      this.autocompleteText = '';
-      this.$refs.textField.clearableCallback();
+    clear () {
+      this.autocompleteText = ''
+      this.$refs.textField.clearableCallback()
     },
 
     /**
      * Focus the input
      * @access private
      */
-    focus() {
-      this.$refs.autocomplete.focus();
+    focus () {
+      this.$refs.autocomplete.focus()
     },
 
     /**
      * Blur the input
      * @access private
      */
-    blur() {
-      this.$refs.autocomplete.blur();
+    blur () {
+      this.$refs.autocomplete.blur()
     },
 
     /**
@@ -898,8 +899,8 @@ export default {
      * @param {String} value The value to update to.
      * @access private
      */
-    update(value) {
-      this.autocompleteText = value;
+    update (value) {
+      this.autocompleteText = value
     },
 
     /**
@@ -907,47 +908,51 @@ export default {
      * as supplied by the browser's 'navigator.geolocation' object.
      * @access private
      */
-    geolocate() {
+    geolocate () {
       if (this.enableGeolocation && !this.geolocateSet) {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
             const geolocation = {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
-            };
+            }
 
             // initialise up knowing that google maps is actually loaded
             this.setupGmapApi(() => {
               const circle = new window.google.maps.Circle({
                 center: geolocation,
                 radius: position.coords.accuracy,
-              });
-              this.autocomplete.setBounds(circle.getBounds());
-              this.geolocateSet = true;
-            });
-          });
+              })
+              this.autocomplete.setBounds(circle.getBounds())
+              this.geolocateSet = true
+            })
+          })
         }
       }
     },
 
-    setupGoogle() {
-      const options = {};
+    setupGoogle () {
+      const options = {}
 
       if (this.types) {
-        options.types = [this.types];
+        options.types = [this.types]
       }
 
       if (this.country) {
         options.componentRestrictions = {
           country: this.country,
-        };
+        }
+      }
+
+      if (this.componentRestrictions) {
+        options.componentRestrictions = Object.assign({}, options.componentRestrictions, this.componentRestrictions)
       }
 
       if (this.fields) {
         if (typeof this.fields === 'string') {
-          options.fields = [this.fields];
+          options.fields = [this.fields]
         } else {
-          options.fields = this.fields;
+          options.fields = this.fields
         }
       }
 
@@ -956,77 +961,77 @@ export default {
         this.autocomplete = new window.google.maps.places.Autocomplete(
           document.getElementById(this.id),
           options,
-        );
+        )
 
         // this is potentially inside a promise so the autocomplete MUST exist to add the listener
         this.autocomplete.addListener('place_changed', () => {
-          const place = this.autocomplete.getPlace();
+          const place = this.autocomplete.getPlace()
 
           // if (!place || !place.geometry) {
           if (Object.keys(place).length < 2) {
             // User entered the name of a Place that was not suggested and
             // pressed the Enter key, or the Place Details request failed.
-            this.$emit('no-results-found', place);
-            return;
+            this.$emit('no-results-found', place)
+            return
           }
 
-          const returnData = {};
+          const returnData = {}
 
           if (place.name !== undefined && this.placeName) {
-            this.autocompleteText = place.name;
+            this.autocompleteText = place.name
           } else if (place.formatted_address !== undefined) {
-            this.autocompleteText = place.formatted_address;
+            this.autocompleteText = place.formatted_address
           }
 
           if (place.address_components !== undefined) {
             // Get each component of the address from the place details
             for (let i = 0; i < place.address_components.length; i += 1) {
-              const addressType = place.address_components[i].types[0];
+              const addressType = place.address_components[i].types[0]
 
               if (this.addressComponents[addressType]) {
-                const val = place.address_components[i][this.addressComponents[addressType]];
-                returnData[addressType] = val;
+                const val = place.address_components[i][this.addressComponents[addressType]]
+                returnData[addressType] = val
               }
             }
             if (place.geometry) {
-              returnData.latitude = place.geometry.location.lat();
-              returnData.longitude = place.geometry.location.lng();
+              returnData.latitude = place.geometry.location.lat()
+              returnData.longitude = place.geometry.location.lng()
             }
 
             // additional fields available in google places results
             if (place.name) {
-              returnData.name = place.name;
+              returnData.name = place.name
             }
             if (place.photos) {
-              returnData.photos = place.photos;
+              returnData.photos = place.photos
             }
             if (place.place_id) {
-              returnData.place_id = place.place_id;
+              returnData.place_id = place.place_id
             }
 
             // return returnData object and PlaceResult object
-            this.$emit('placechanged', returnData, place, this.id);
+            this.$emit('placechanged', returnData, place, this.id)
 
             // update autocompleteText then emit change event
-            this.lastSelectedPlace = this.autocompleteText;
-            this.onChange();
+            this.lastSelectedPlace = this.autocompleteText
+            this.onChange()
             if (this.validateOnBlur) {
               // manually validate the underlying v-text-field because
               // selecting an option causes the field to lose focus
               // before the place_changed event is emitted and we have
               // a chance to fill the field with the formatted address
-              this.$refs.textField.validate();
+              this.$refs.textField.validate()
             }
           }
-        });
-      });
+        })
+      })
 
 
       // Override the default placeholder
       // text set by Google with the
       // placeholder prop value or an empty value.
       document.getElementById(this.id)
-        .setAttribute('placeholder', this.placeholder ? this.placeholder : '');
+        .setAttribute('placeholder', this.placeholder ? this.placeholder : '')
     },
 
     /**
@@ -1037,14 +1042,14 @@ export default {
      *  fixes https://github.com/MadimetjaShika/vuetify-google-autocomplete/issues/60
      * @private
      */
-    setupGmapApi(callback) {
+    setupGmapApi (callback) {
       if (this.$vueGoogleMapsCompatibility) {
         if (Object.prototype.hasOwnProperty.call(this, '$gmapApiPromiseLazy')) {
           this.$gmapApiPromiseLazy()
-            .then(() => callback());
+            .then(() => callback())
         }
       } else if (Object.prototype.hasOwnProperty.call(window, 'google')) {
-        callback();
+        callback()
       } else {
         // no logger with this library. But this is a likely configuration error condition
         // Note: unwilling to throw an Error
@@ -1055,156 +1060,156 @@ export default {
    * @mixin
    * @desc Updates the autocompleteText member if a v-model was provided.
    */
-  created() {
-    this.autocompleteText = this.value ? this.value : '';
-    this.lastSelectedPlace = this.autocompleteText;
+  created () {
+    this.autocompleteText = this.value ? this.value : ''
+    this.lastSelectedPlace = this.autocompleteText
   },
   /**
    * @mixin
    * @desc Loads the Google Autocomplete SDK.
    */
-  mounted() {
-    this.vgaMapState = window.vgaMapState;
-    this.setupGmapApi(this.setupGoogle);
+  mounted () {
+    this.vgaMapState = window.vgaMapState
+    this.setupGmapApi(this.setupGoogle)
   },
   /**
    * @mixin
    * @desc Resets the autocomplete loaded state.
    */
-  destroyed() {
+  destroyed () {
     // trip this on the way out so we can differentiate return trips in mounted()
-    window.vgaMapState.initMap = false;
+    window.vgaMapState.initMap = false
   },
   /**
    * @mixin
    * @desc See code.
    */
-  render(createElement) {
-    const self = this;
+  render (createElement) {
+    const self = this
     return createElement('v-text-field', {
-      ref: 'textField',
-      attrs: {
-        id: self.id,
-        name: self.id,
-        autocapitalize: self.autocapitalize,
-        autocorrect: self.autocorrect,
-        spellcheck: self.spellcheck,
+        ref: 'textField',
+        attrs: {
+          id: self.id,
+          name: self.id,
+          autocapitalize: self.autocapitalize,
+          autocorrect: self.autocorrect,
+          spellcheck: self.spellcheck,
+        },
+        props: {
+          'append-icon': self.appendIcon,
+          'append-outer-icon': self.appendOuterIcon,
+          autofocus: self.autofocus,
+          'background-color': self.backgroundColor,
+          'browser-autocomplete': self.browserAutocomplete,
+          'clear-icon': self.clearIcon,
+          clearable: self.clearable,
+          color: self.color,
+          counter: self.counter,
+          dark: self.dark,
+          dense: self.dense,
+          disabled: self.disabled,
+          error: self.error,
+          'error-count': self.errorCount,
+          'error-messages': self.errorMessages,
+          filled: self.filled,
+          flat: self.flat,
+          'full-width': self.fullWidth,
+          'hide-details': self.hideDetails,
+          hint: self.hint,
+          label: self.label,
+          light: self.light,
+          'loader-height': self.loaderHeight,
+          loading: self.loading,
+          messages: self.messages,
+          mask: self.mask,
+          'no-resize': self.noResize,
+          outlined: self.outlined,
+          'persistent-hint': self.persistentHint,
+          placeholder: self.placeholder,
+          prefix: self.prefix,
+          'prepend-icon': self.prependIcon,
+          'prepend-inner-icon': self.prependIconInner,
+          readonly: self.readonly,
+          'return-masked-value': self.returnMaskedValue,
+          reverse: self.reverse,
+          rounded: self.rounded,
+          rows: self.rows,
+          rules: self.rulesPlusInternalRules,
+          ref: 'autocomplete',
+          shaped: self.shaped,
+          'single-line': self.singleLine,
+          solo: self.solo,
+          'solo-inverted': self.soloInverted,
+          suffix: self.suffix,
+          success: self.success,
+          'success-messages': self.successMessages,
+          tabindex: self.tabindex,
+          textarea: self.textarea,
+          'toggle-keys': self.toggleKeys,
+          type: self.type,
+          value: self.autocompleteText,
+          'validate-on-blur': self.validateOnBlur,
+          '@focus': self.onFocus(),
+          '@blur': self.onFocus(),
+          '@change': self.onChange(),
+          '@click:append': self.onClickAppend(),
+          '@click:append-outer': self.onClickAppendOuter(),
+          '@click:clear': self.onClickClear(),
+          '@click:prepend': self.onClickPrependInner(),
+          '@click:prepend-inner': self.onClickPrependInner(),
+          '@update:error': self.onUpdateError(),
+          '@keypress': self.onKeyPress(),
+        },
+        domProps: {
+          // value: self.autocompleteText,
+        },
+        on: {
+          focus: () => {
+            self.onFocus()
+          },
+          blur: () => {
+            self.onBlur()
+          },
+          change: () => {
+            self.onChange()
+          },
+          'click:append': () => {
+            self.onClickAppend()
+          },
+          'click:append-outer': () => {
+            self.onClickAppendOuter()
+          },
+          'click:clear': () => {
+            self.onClickClear()
+          },
+          'click:prepend': () => {
+            self.onClickPrepend()
+          },
+          'click:prepend-inner': () => {
+            self.onClickPrependInner()
+          },
+          'update:error': () => {
+            self.onUpdateError()
+          },
+          keypress: (e) => {
+            self.onKeyPress(e.target.value)
+          },
+          input: (value) => {
+            // NOTE: value is not an event v-text-field raises this with the actual value
+            this.autocompleteText = value
+          },
+        },
       },
-      props: {
-        'append-icon': self.appendIcon,
-        'append-outer-icon': self.appendOuterIcon,
-        autofocus: self.autofocus,
-        'background-color': self.backgroundColor,
-        'browser-autocomplete': self.browserAutocomplete,
-        'clear-icon': self.clearIcon,
-        clearable: self.clearable,
-        color: self.color,
-        counter: self.counter,
-        dark: self.dark,
-        dense: self.dense,
-        disabled: self.disabled,
-        error: self.error,
-        'error-count': self.errorCount,
-        'error-messages': self.errorMessages,
-        filled: self.filled,
-        flat: self.flat,
-        'full-width': self.fullWidth,
-        'hide-details': self.hideDetails,
-        hint: self.hint,
-        label: self.label,
-        light: self.light,
-        'loader-height': self.loaderHeight,
-        loading: self.loading,
-        messages: self.messages,
-        mask: self.mask,
-        'no-resize': self.noResize,
-        outlined: self.outlined,
-        'persistent-hint': self.persistentHint,
-        placeholder: self.placeholder,
-        prefix: self.prefix,
-        'prepend-icon': self.prependIcon,
-        'prepend-inner-icon': self.prependIconInner,
-        readonly: self.readonly,
-        'return-masked-value': self.returnMaskedValue,
-        reverse: self.reverse,
-        rounded: self.rounded,
-        rows: self.rows,
-        rules: self.rulesPlusInternalRules,
-        ref: 'autocomplete',
-        shaped: self.shaped,
-        'single-line': self.singleLine,
-        solo: self.solo,
-        'solo-inverted': self.soloInverted,
-        suffix: self.suffix,
-        success: self.success,
-        'success-messages': self.successMessages,
-        tabindex: self.tabindex,
-        textarea: self.textarea,
-        'toggle-keys': self.toggleKeys,
-        type: self.type,
-        value: self.autocompleteText,
-        'validate-on-blur': self.validateOnBlur,
-        '@focus': self.onFocus(),
-        '@blur': self.onFocus(),
-        '@change': self.onChange(),
-        '@click:append': self.onClickAppend(),
-        '@click:append-outer': self.onClickAppendOuter(),
-        '@click:clear': self.onClickClear(),
-        '@click:prepend': self.onClickPrependInner(),
-        '@click:prepend-inner': self.onClickPrependInner(),
-        '@update:error': self.onUpdateError(),
-        '@keypress': self.onKeyPress(),
-      },
-      domProps: {
-        // value: self.autocompleteText,
-      },
-      on: {
-        focus: () => {
-          self.onFocus();
-        },
-        blur: () => {
-          self.onBlur();
-        },
-        change: () => {
-          self.onChange();
-        },
-        'click:append': () => {
-          self.onClickAppend();
-        },
-        'click:append-outer': () => {
-          self.onClickAppendOuter();
-        },
-        'click:clear': () => {
-          self.onClickClear();
-        },
-        'click:prepend': () => {
-          self.onClickPrepend();
-        },
-        'click:prepend-inner': () => {
-          self.onClickPrependInner();
-        },
-        'update:error': () => {
-          self.onUpdateError();
-        },
-        keypress: (e) => {
-          self.onKeyPress(e.target.value);
-        },
-        input: (value) => {
-          // NOTE: value is not an event v-text-field raises this with the actual value
-          this.autocompleteText = value;
-        },
-      },
-    },
-    [
-      'append',
-      'append-outer',
-      'label',
-      'message',
-      'prepend',
-      'prepend-inner',
-      'progress',
-    ]
-      .map(slot => createElement('template', { slot }, [this.$slots[slot]])));
+      [
+        'append',
+        'append-outer',
+        'label',
+        'message',
+        'prepend',
+        'prepend-inner',
+        'progress',
+      ]
+        .map(slot => createElement('template', { slot }, [this.$slots[slot]])))
   },
   /**
    * @mixin
@@ -1213,37 +1218,37 @@ export default {
     /**
      * Emit the new autocomplete text whenever it changes.
      */
-    autocompleteText: function autocompleteText(newVal) {
-      this.$emit('input', newVal || '');
+    autocompleteText: function autocompleteText (newVal) {
+      this.$emit('input', newVal || '')
     },
 
     /**
      * Keep autocompleteText up-to-date with v-model.
      */
-    value: function value(newVal) {
+    value: function value (newVal) {
       if (newVal !== this.autocompleteText) {
-        this.autocompleteText = newVal;
-        this.lastSelectedPlace = newVal;
+        this.autocompleteText = newVal
+        this.lastSelectedPlace = newVal
       }
     },
     /**
      * Update the SDK country option whenever it changes from the parent.
      */
-    country: function country(newVal) {
+    country: function country (newVal) {
       if (newVal) {
-        this.autocomplete.componentRestrictions.country = newVal;
+        this.autocomplete.componentRestrictions.country = newVal
       }
     },
 
     /**
      * Update the SDK fields option whenever it changes from the parent.
      */
-    fields: function fields(newVal) {
+    fields: function fields (newVal) {
       if (newVal) {
         if (typeof newVal === 'string') {
-          this.setFields([newVal]);
+          this.setFields([newVal])
         } else {
-          this.setFields(newVal);
+          this.setFields(newVal)
         }
       }
     },
@@ -1251,12 +1256,12 @@ export default {
     /**
      * Watches for changes on the Geolocation option.
      */
-    enableGeolocation: function enableGeolocation(newVal) {
+    enableGeolocation: function enableGeolocation (newVal) {
       if (!newVal) {
-        this.geolocateSet = false;
+        this.geolocateSet = false
       }
 
-      this.enableGeolocation = newVal;
+      this.enableGeolocation = newVal
     },
 
     /**
@@ -1264,23 +1269,23 @@ export default {
      * when changes works out the google maps load strategy. In the case that requires
      * vue2-google-maps compatibility the known lazy load strategy from that library is used.
      */
-    'vgaMapState.initMap': function vgaMapStateInitMap(value) {
+    'vgaMapState.initMap': function vgaMapStateInitMap (value) {
       if (value) {
-        this.setupGmapApi(this.setupGoogle);
+        this.setupGmapApi(this.setupGoogle)
       }
     },
 
-    'window.vueGoogleMapsInit': function vgaMapStateInitMap() {
-      window.vgaMapState.initMap = true;
+    'window.vueGoogleMapsInit': function vgaMapStateInitMap () {
+      window.vgaMapState.initMap = true
     },
 
     /**
      * Update the SDK types option whenever it changes from the parent.
      */
-    types: function types(newVal) {
+    types: function types (newVal) {
       if (newVal) {
-        this.autocomplete.setTypes([this.types]);
+        this.autocomplete.setTypes([this.types])
       }
     },
   },
-};
+}

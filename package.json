@@ -1,6 +1,6 @@
 {
   "name": "vuetify-google-autocomplete-extend",
-  "version": "1.0,0",
+  "version": "1.0.1",
   "description": "A Vuetify ready Vue.jS component to Google Places Autocomplete",
   "author": "Madi Shika <mmjshika@gmail.com> Haodong Ju <juhaodong@gmail.com>",
   "keywords": [
@@ -35,6 +35,7 @@
     "vuetify": "^2.3.4"
   },
   "devDependencies": {
+    "release-it": "^13.5.8",
     "autoprefixer": "^7.1.2",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.22.1",
@@ -99,6 +100,12 @@
   "engines": {
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "update: release v${version}",
+      "requireCleanWorkingDir": false
+    }
   },
   "browserslist": [
     "> 1%",
