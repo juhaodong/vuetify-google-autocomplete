@@ -964,9 +964,7 @@ export default {
         this.autocomplete.addListener('place_changed', () => {
           const place = this.autocomplete.getPlace()
 
-          if(place.postal_code&&this.componentRestrictions.postalCode){
-            console.log(place.postal_code)
-          }
+
           // if (!place || !place.geometry) {
           if (Object.keys(place).length < 2) {
             // User entered the name of a Place that was not suggested and
@@ -1008,7 +1006,14 @@ export default {
             if (place.place_id) {
               returnData.place_id = place.place_id
             }
+            if (returnData.postal_code && this.componentRestrictions.postalCode) {
 
+              if(!this.componentRestrictions.postalCode.some(p=>p===returnData.postal_code)){
+                this.$emit('no-results-found', place)
+                this.autocompleteText=''
+                return
+              }
+            }
             // return returnData object and PlaceResult object
             this.$emit('placechanged', returnData, place, this.id)
 
@@ -1023,6 +1028,7 @@ export default {
               this.$refs.textField.validate()
             }
           }
+
         })
       })
 
