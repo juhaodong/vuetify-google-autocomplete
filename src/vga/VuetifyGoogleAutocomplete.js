@@ -944,7 +944,12 @@ export default {
         }
       }
       if (this.componentRestrictions) {
-        options.bounds = this.componentRestrictions
+        options.bounds = {
+          east: this.componentRestrictions[0],
+          south: this.componentRestrictions[1],
+          west: this.componentRestrictions[2],
+          north: this.componentRestrictions[3],
+        }
         options.strictBounds = true
       }
 
