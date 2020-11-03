@@ -944,6 +944,7 @@ export default {
         }
       }
       if (this.componentRestrictions) {
+        this.componentRestrictions=this.componentRestrictions.map(r=>Number.parseFloat(r))
         options.bounds = {
           east: this.componentRestrictions[0],
           south: this.componentRestrictions[1],
