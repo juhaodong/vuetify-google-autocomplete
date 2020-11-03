@@ -943,6 +943,10 @@ export default {
           country: this.country,
         }
       }
+      if (this.componentRestrictions) {
+        options.bounds = this.componentRestrictions
+        options.strictBounds = true
+      }
 
       if (this.fields) {
         if (typeof this.fields === 'string') {
@@ -1006,14 +1010,7 @@ export default {
             if (place.place_id) {
               returnData.place_id = place.place_id
             }
-            if (returnData.postal_code && this.componentRestrictions.postalCode) {
 
-              if(!this.componentRestrictions.postalCode.some(p=>p===returnData.postal_code)){
-                this.$emit('no-results-found', place)
-                this.autocompleteText=''
-                return
-              }
-            }
             // return returnData object and PlaceResult object
             this.$emit('placechanged', returnData, place, this.id)
 
