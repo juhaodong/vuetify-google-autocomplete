@@ -108,7 +108,7 @@ export default {
       type: String,
       default: 'off',
     },
-    componentRestrictions: { type: Object, default: null },
+    componentRestrictions: { type: Array, default: null },
     /**
      * Maps to Vuetify 'clear-icon' prop.
      *
