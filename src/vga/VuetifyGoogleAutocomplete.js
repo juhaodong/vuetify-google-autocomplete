@@ -943,13 +943,13 @@ export default {
           country: this.country,
         }
       }
-      if (this.componentRestrictions) {
-        this.componentRestrictions=this.componentRestrictions.map(r=>Number.parseFloat(r))
+      if (this.componentRestrictions!=null&&this.componentRestrictions.length===4) {
+        const bounds=this.componentRestrictions.map(r=>Number.parseFloat(r))
         options.bounds = {
-          east: this.componentRestrictions[0],
-          south: this.componentRestrictions[1],
-          west: this.componentRestrictions[2],
-          north: this.componentRestrictions[3],
+          east: bounds[0],
+          south: bounds[1],
+          west: bounds[2],
+          north: bounds[3],
         }
         options.strictBounds = true
       }
